@@ -80,7 +80,7 @@ function TeamBuilder() {
     };
 
     return (
-        <Container>
+        <Container maxWidth="sm">
             <Paper elevation={0} style={{padding: '2rem'}}>
                 <Grid container spacing={2} alignItems="center">
                     <Grid item xs={12} sm={8}>
@@ -156,8 +156,8 @@ function TeamBuilder() {
                         </Grid>
                     </Grid>
                 )}
-                <Grid container marginTop={6} alignItems="center">
-                    <Grid item sm={12}>
+                <Grid container marginTop={6} direction="column" alignItems="center">
+                    <Grid item xs={12}>
                         <Button onClick={handleGenerateTeams} variant="contained" color="secondary">
                             Generate Teams
                         </Button>
