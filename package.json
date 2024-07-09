@@ -1,9 +1,9 @@
 {
-  "name": "team-builder",
+  "name": "randomunits",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://rsl-pseudocode.github.io/team-builder",
+  "homepage": "https://randomunits.com",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

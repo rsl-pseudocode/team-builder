@@ -17,13 +17,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
 
-function TeamBuilder() {
+function UnitsBuilder() {
     const [names, setNames] = useState([]);
     const [name, setName] = useState('');
     const [editedName, setEditedName] = useState('');
     const [editIndex, setEditIndex] = useState(null);
-    const [numTeams, setNumTeams] = useState('');
-    const [teams, setTeams] = useState([]);
+    const [numUnits, setNumUnits] = useState('');
+    const [units, setUnits] = useState([]);
 
     const handleAddName = () => {
         if (name.trim() !== '') {
@@ -62,21 +62,21 @@ function TeamBuilder() {
         setEditedName('');
     };
 
-    const handleGenerateTeams = () => {
-        const numberOfTeams = parseInt(numTeams, 10);
-        if (isNaN(numberOfTeams) || numberOfTeams <= 1) {
-            alert('Please enter a valid number of teams');
+    const handleGenerateUnits = () => {
+        const numberOfUnits = parseInt(numUnits, 10);
+        if (isNaN(numberOfUnits) || numberOfUnits <= 1) {
+            alert('Please enter a valid number of units');
             return;
         }
 
         const shuffledNames = [...names].sort(() => Math.random() - 0.5);
-        const teamsArray = Array.from({length: numberOfTeams}, () => []);
+        const unitsArray = Array.from({length: numberOfUnits}, () => []);
 
         shuffledNames.forEach((name, index) => {
-            teamsArray[index % numberOfTeams].push(name);
+            unitsArray[index % numberOfUnits].push(name);
         });
 
-        setTeams(teamsArray);
+        setUnits(unitsArray);
     };
 
     return (
@@ -92,7 +92,7 @@ function TeamBuilder() {
                             fullWidth
                         />
                     </Grid>
-                    <Grid item>
+                    <Grid item sm={4} container justifyContent="center">
                         <Button onClick={handleAddName} variant="contained" color="primary">
                             Add Name
                         </Button>
@@ -102,9 +102,9 @@ function TeamBuilder() {
                 <Grid container spacing={2} marginTop={2} alignItems="center">
                     <Grid item xs={12} sm={8}>
                         <TextField
-                            label="How many teams?"
-                            value={numTeams}
-                            onChange={(e) => setNumTeams(e.target.value)}
+                            label="How many units?"
+                            value={numUnits}
+                            onChange={(e) => setNumUnits(e.target.value)}
                             variant="outlined"
                             type="number"
                             fullWidth
@@ -158,18 +158,18 @@ function TeamBuilder() {
                 )}
                 <Grid container marginTop={6} direction="column" alignItems="center">
                     <Grid item xs={12}>
-                        <Button onClick={handleGenerateTeams} variant="contained" color="secondary">
-                            Generate Teams
+                        <Button onClick={handleGenerateUnits} variant="contained" color="secondary">
+                            Randomize Units
                         </Button>
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} marginTop={2} alignItems="center">
                     <Grid item>
-                        {teams.map((team, index) => (
+                        {units.map((unit, index) => (
                             <Box key={index} mt={1}>
-                                <Typography variant="h6">Team {index + 1}</Typography>
+                                <Typography variant="h6">Unit {index + 1}</Typography>
                                 <List>
-                                    {team.map((member, idx) => (
+                                    {unit.map((member, idx) => (
                                         <ListItem key={idx}>{member}</ListItem>
                                     ))}
                                 </List>
@@ -182,4 +182,4 @@ function TeamBuilder() {
     );
 }
 
-export default TeamBuilder;
+export default UnitsBuilder;

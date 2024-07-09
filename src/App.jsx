@@ -1,5 +1,5 @@
 import './App.css'
-import TeamBuilder from "./Teambuilder";
+import UnitsBuilder from "./UnitsBuilder";
 import DonateButton from "./components/DonateButton";
 import {Grid, Typography} from "@mui/material";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
@@ -31,13 +31,16 @@ function App() {
                 justifyContent="center"
                 sx={{minHeight: '100vh'}}
             >
-                <Grid xs={12}>
+                <Grid>
                     <Typography variant="h2" gutterBottom>
-                        Teambuilder
+                        Random units
                     </Typography>
+                    <p>
+                        Add your friends names and randomize teams/units
+                    </p>
                 </Grid>
                 <Grid xs={12}>
-                    <TeamBuilder/>
+                    <UnitsBuilder/>
                 </Grid>
                 <Grid xs={12}>
                     <DonateButton/>
