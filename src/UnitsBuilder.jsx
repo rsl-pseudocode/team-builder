@@ -83,7 +83,7 @@ function UnitsBuilder() {
         <Container maxWidth="sm">
             <Paper elevation={0} style={{padding: '2rem'}}>
                 <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={12} sm={8}>
+                    <Grid item xs={12} sm={7}>
                         <TextField
                             label="Name"
                             value={name}
@@ -92,7 +92,7 @@ function UnitsBuilder() {
                             fullWidth
                         />
                     </Grid>
-                    <Grid item sm={4} container justifyContent="center">
+                    <Grid item sm={5} container justifyContent="center">
                         <Button onClick={handleAddName} variant="contained" color="primary">
                             Add Name
                         </Button>
@@ -100,7 +100,7 @@ function UnitsBuilder() {
                 </Grid>
 
                 <Grid container spacing={2} marginTop={2} alignItems="center">
-                    <Grid item xs={12} sm={8}>
+                    <Grid item xs={12} sm={7}>
                         <TextField
                             label="How many units?"
                             value={numUnits}
