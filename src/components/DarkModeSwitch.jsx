@@ -1,6 +1,5 @@
 import {FormControlLabel, FormGroup, styled, Switch} from "@mui/material";
 import {useState} from "react";
-import {createTheme} from "@mui/material/styles";
 
 const DarkModeSwitcher = styled(Switch)(({theme}) => ({
     width: 62,

@@ -3,7 +3,8 @@ import UnitsBuilder from "./UnitsBuilder";
 import {Grid, Typography} from "@mui/material";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
-import DarkModeSwitch from "./components/DarkModeSwich.jsx";
+import DarkModeSwitch from "./components/DarkModeSwitch.jsx";
+import DonateButton from "./components/DonateButton.jsx";
 import {useState} from "react";
 
 function App() {
@@ -39,6 +40,9 @@ function App() {
                 </Grid>
                 <Grid item>
                     <UnitsBuilder/>
+                </Grid>
+                <Grid item>
+                    <DonateButton/>
                 </Grid>
             </Grid>
         </ThemeProvider>
