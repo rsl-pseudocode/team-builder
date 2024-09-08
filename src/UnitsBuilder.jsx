@@ -165,9 +165,9 @@ function UnitsBuilder() {
                     )}
                 </Grid>
 
-                <Grid container marginTop={3}>
-                    <Typography>Amount of friends: {names.length}</Typography>
-                </Grid>
+                {(names.length > 0) && (<Grid container marginTop={3}>
+                        <Typography>Amount of friends: {names.length}</Typography>
+                </Grid>)}                
 
                 <Grid container spacing={2} marginTop={1} alignItems="center">
                     <Grid item xs={12} sm={7}>

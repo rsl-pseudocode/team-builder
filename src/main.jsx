@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import PrivacyPolicy from "./PrivacyPolicy.jsx";
 import './index.css'
 import {Routes, Route, HashRouter} from "react-router-dom";
 
