@@ -1,4 +1,5 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
     Box,
     Button,
@@ -16,6 +17,9 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
 
 function UnitsBuilder() {
     const [names, setNames] = useState([]);
@@ -26,9 +30,51 @@ function UnitsBuilder() {
     const [numUnits, setNumUnits] = useState('');
     const [units, setUnits] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
+    const [copySuccess, setCopySuccess] = useState('');
+    const [shareUrl, setShareUrl] = useState('');
+    const [isResultView, setIsResultView] = useState(false);
+
+    const query = useQuery();
+
+    useEffect(() => {
+      const encodedResults = query.get('results');
+      if (encodedResults) {
+        try {
+          const decodedResults = JSON.parse(atob(encodedResults));
+          console.log('Decoded results:', decodedResults);
+          setUnits(decodedResults);
+          setIsResultView(true);
+        } catch (error) {
+          console.error('Failed to parse results from URL', error);
+        }
+      }
+    }, [window.location.href]);
+
+    const updateURL = (unitsArray) => {
+        const encodedResults = btoa(JSON.stringify(unitsArray));
+        setShareUrl(`${window.location.origin}/#/?results=${encodedResults}`);
+    };
+  
+    const handleCopyToClipboard = () => {
+        navigator.clipboard.writeText(shareUrl)
+          .then(() => {
+            setCopySuccess('URL copied to clipboard!');
+            setTimeout(() => setCopySuccess(''), 3000);
+          })
+          .catch(err => {
+            setCopySuccess('Failed to copy URL');
+            setTimeout(() => setCopySuccess(''), 3000); 
+            console.error('Failed to copy URL: ', err);
+          });
+      };
+
+    const reset = () => {
+       setErrorMessage('');
+       setShareUrl('');
+    };    
 
     const handleAddName = () => {
-        setErrorMessage('');
+        reset();
         if (name.trim() !== '' && !names.includes(name.trim())) {
             setNames([...names, name.trim()]);
             setName('');            
@@ -48,14 +94,14 @@ function UnitsBuilder() {
         if (index === editIndex) {
             setEditIndex(null);
             setEditedName('');
-            setErrorMessage('');
+            reset();
         }
     };
 
     const handleEditName = (index) => {
         setEditIndex(index);
         setEditedName(names[index]);
-        setErrorMessage('');
+        reset();
     };
 
     const handleSaveEdit = () => {
@@ -65,7 +111,11 @@ function UnitsBuilder() {
             setNames(updatedNames);
             setEditIndex(null);
             setEditedName('');
-            setErrorMessage('');
+            reset();
+        }
+        if(names.includes(editedName.trim()))
+        {
+            setErrorMessage('Name already exists');           
         }
     };
 
@@ -90,118 +140,157 @@ function UnitsBuilder() {
         });
 
         setUnits(unitsArray);
+        updateURL(unitsArray);
     };
 
     return (
         <Container maxWidth="sm">
-            <Paper elevation={0} style={{padding: '2rem'}}>               
-                {names.length > 0 && (
-                    <Grid container spacing={2} alignItems="center">
-                        <Grid item xs={12} sm={8}>
-                            <Typography variant="h6">Added friends:</Typography>
-                            <List>
-                                {names.map((name, index) => (
-                                    <ListItem key={index}>
-                                        {editIndex === index ? (
-                                            <>
-                                                <TextField
-                                                    value={editedName}
-                                                    onChange={(e) => setEditedName(e.target.value)}
-                                                    variant="outlined"
-                                                    fullWidth
-                                                />
-                                                <Button onClick={handleSaveEdit} variant="contained" color="primary"
-                                                        style={{marginLeft: '10px'}}>
-                                                    Save
-                                                </Button>
-                                                <Button onClick={handleCancelEdit} variant="contained" color="inherit"
-                                                        style={{marginLeft: '10px'}}>
-                                                    Cancel
-                                                </Button>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <ListItemText primary={name}/>
-                                                <ListItemSecondaryAction>
-                                                    <IconButton edge="end" aria-label="edit"
-                                                                onClick={() => handleEditName(index)}>
-                                                        <EditIcon/>
-                                                    </IconButton>
-                                                    <IconButton edge="end" aria-label="delete"
-                                                                onClick={() => handleRemoveName(index)}>
-                                                        <DeleteIcon/>
-                                                    </IconButton>
-                                                </ListItemSecondaryAction>
-                                            </>
-                                        )}
-                                    </ListItem>
-                                ))}
-                            </List>
-                        </Grid>
-                    </Grid>
-                )}
-                 <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={12} sm={7}>
-                        <TextField
-                            label="Name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            variant="outlined"
-                            fullWidth
-                            inputRef={nameTextFieldRef}
-                        />
-                    </Grid>
-                    <Grid item sm={5} container justifyContent="center">
-                        <Button onClick={handleAddName} variant="contained" color="primary">
-                            Add Name
-                        </Button>                                                
-                    </Grid>
-                    {(errorMessage !== '') && (
-                        <Grid item xs={12} sm={7} container>
-                            <Typography color="error">
-                                {errorMessage}
-                            </Typography>
-                        </Grid>
-                    )}
-                </Grid>
-
-                {(names.length > 0) && (<Grid container marginTop={3}>
-                        <Typography>Amount of friends: {names.length}</Typography>
-                </Grid>)}                
-
-                <Grid container spacing={2} marginTop={1} alignItems="center">
-                    <Grid item xs={12} sm={7}>
-                        <TextField
-                            label="How many units?"
-                            value={numUnits}
-                            onChange={(e) => setNumUnits(e.target.value)}
-                            variant="outlined"
-                            type="number"
-                            fullWidth
-                        />
-                    </Grid>
-                </Grid>
-                <Grid container marginTop={6} direction="column" alignItems="center">
-                    <Grid item xs={12}>
-                        <Button onClick={handleGenerateUnits} variant="contained" color="secondary">
-                            Randomize Units
-                        </Button>
-                    </Grid>
-                </Grid>
-                <Grid container spacing={2} marginTop={2} alignItems="center">
-                    <Grid item>
-                        {units.map((unit, index) => (
-                            <Box key={index} mt={1}>
-                                <Typography variant="h6">Unit {index + 1}</Typography>
+            <Paper elevation={0} style={{padding: '2rem'}}>
+            {isResultView ? (
+                    <Typography  textAlign="center" variant="h4">Your units</Typography>
+                ) : (
+                    <>
+                     {names.length > 0 && (
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs={12} sm={8}>
+                                <Typography variant="h6">Added friends:</Typography>
                                 <List>
-                                    {unit.map((member, idx) => (
-                                        <ListItem key={idx}>{member}</ListItem>
+                                    {names.map((name, index) => (
+                                        <ListItem key={index}>
+                                            {editIndex === index ? (
+                                                <>
+                                                    <TextField
+                                                        value={editedName}
+                                                        onChange={(e) => setEditedName(e.target.value)}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                    />
+                                                    <Button onClick={handleSaveEdit} variant="contained" color="primary"
+                                                            style={{marginLeft: '10px'}}>
+                                                        Save
+                                                    </Button>
+                                                    <Button onClick={handleCancelEdit} variant="contained" color="inherit"
+                                                            style={{marginLeft: '10px'}}>
+                                                        Cancel
+                                                    </Button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <ListItemText primary={name}/>
+                                                    <ListItemSecondaryAction>
+                                                        <IconButton edge="end" aria-label="edit"
+                                                                    onClick={() => handleEditName(index)}>
+                                                            <EditIcon/>
+                                                        </IconButton>
+                                                        <IconButton edge="end" aria-label="delete"
+                                                                    onClick={() => handleRemoveName(index)}>
+                                                            <DeleteIcon/>
+                                                        </IconButton>
+                                                    </ListItemSecondaryAction>
+                                                </>
+                                            )}
+                                        </ListItem>
                                     ))}
                                 </List>
-                            </Box>
-                        ))}
+                            </Grid>
+                        </Grid>
+                    )}    
+                   
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs={12} sm={7}>
+                                <TextField
+                                    label="Name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    variant="outlined"
+                                    fullWidth
+                                    inputRef={nameTextFieldRef}
+                                />
+                            </Grid>
+                            <Grid item sm={5} container justifyContent="center">
+                                <Button onClick={handleAddName} variant="contained" color="primary">
+                                    Add Name
+                                </Button>                                                
+                            </Grid>
+                            {(errorMessage !== '') && (
+                                <Grid item xs={12} sm={7} container>
+                                    <Typography color="error">
+                                        {errorMessage}
+                                    </Typography>
+                                </Grid>
+                            )}
+                        </Grid>
+                    
+    
+                    {(names.length > 0) && (<Grid container marginTop={3}>
+                            <Typography>Amount of friends: {names.length}</Typography>
+                    </Grid>)}                
+    
+                    <Grid container spacing={2} marginTop={1} alignItems="center">
+                        <Grid item xs={12} sm={7}>
+                            <TextField
+                                label="How many units?"
+                                value={numUnits}
+                                onChange={(e) => setNumUnits(e.target.value)}
+                                variant="outlined"
+                                type="number"
+                                fullWidth
+                            />
+                        </Grid>
                     </Grid>
-                </Grid>
+                    <Grid container marginTop={6} direction="column" alignItems="center">
+                        <Grid item xs={12}>
+                            <Button onClick={handleGenerateUnits} variant="contained" color="secondary">
+                                Randomize Units
+                            </Button>
+                        </Grid>
+                    </Grid>
+                   
+                    {( units.length > 0 && shareUrl) && 
+                        (<Grid container marginTop={2} direction="column" alignItems="center">
+                        <Grid item xs={12}>
+                            <Box textAlign="center" style={{ cursor: 'pointer' }} onClick={handleCopyToClipboard}>
+                                <Typography variant="h6" color="textPrimary">
+                                    Share the results:
+                                </Typography>
+                                <Typography variant="body1" color="textSecondary">
+                                    {shareUrl}
+                                </Typography>
+                                {copySuccess && (
+                                    <Typography variant="body2" color="success.main">
+                                        {copySuccess}
+                                    </Typography>
+                                )}   
+                            </Box>
+                        </Grid>
+                    </Grid> )}    
+                    </>
+                )}      
+            {units.length > 0 && (
+                    <Box
+                    textAlign="center"
+                    padding={2}
+                    border={1}
+                    borderColor="grey.300"
+                    borderRadius={4}
+                    marginTop={2}
+                  >
+                    <Grid container spacing={2}>
+                      {units.map((unit, index) => (
+                        <Grid item xs={12} key={index}>
+                          <Box mt={1}>
+                            <Typography variant="h6">Unit {index + 1}</Typography>
+                            <List>
+                              {unit.map((member, idx) => (
+                                <ListItem key={idx}>{member}</ListItem>
+                              ))}
+                            </List>
+                          </Box>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Box>
+                )}
             </Paper>
         </Container>
     );

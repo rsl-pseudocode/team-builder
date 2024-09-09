@@ -5,16 +5,32 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
 import DarkModeSwitch from "./components/DarkModeSwitch.jsx";
 import DonateButton from "./components/DonateButton.jsx";
-import {useState} from "react";
+import {useState, useEffect} from "react";
+import { useLocation } from 'react-router-dom';
+
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
 
 function App() {
-    const [toggleDarkMode, setToggleDarkTheme] = useState(true);
+    const [toggleDarkMode, setToggleDarkTheme] = useState(true);    
+    const [isResultView, setIsResultView] = useState(false);
 
     const darkTheme = createTheme({
         palette: {
             mode: toggleDarkMode ? 'dark' : 'light',
         },
     });
+
+
+    const query = useQuery();
+
+    useEffect(() => {
+      const hasResultsParam = query.has('results');
+      if (hasResultsParam) {        
+          setIsResultView(true);        
+      }
+    }, [window.location.href]);
 
     return (
         <ThemeProvider theme={darkTheme}>
@@ -34,9 +50,7 @@ function App() {
                     <Typography variant="h2" gutterBottom>
                         Random units
                     </Typography>
-                    <p>
-                        Add your friends names and randomize teams/units
-                    </p>
+                    {!isResultView && <Typography>Add your friends names and randomize teams/units</Typography>}                    
                 </Grid>
                 <Grid item>
                     <UnitsBuilder/>
