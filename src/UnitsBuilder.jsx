@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import ShareIcon from '@mui/icons-material/Share';
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -249,13 +250,13 @@ function UnitsBuilder() {
                     {( units.length > 0 && shareUrl) && 
                         (<Grid container marginTop={2} direction="column" alignItems="center">
                         <Grid item xs={12}>
-                            <Box textAlign="center" style={{ cursor: 'pointer' }} onClick={handleCopyToClipboard}>
+                            <Box textAlign="center" style={{ cursor: 'pointer' }} >
                                 <Typography variant="h6" color="textPrimary">
                                     Share the results:
                                 </Typography>
-                                <Typography variant="body1" color="textSecondary">
-                                    {shareUrl}
-                                </Typography>
+                                <Button style={{margin: '0.5rem'}} variant="contained" color="success" endIcon={<ShareIcon/>} onClick={handleCopyToClipboard}>
+                                Share link
+                                </Button>
                                 {copySuccess && (
                                     <Typography variant="body2" color="success.main">
                                         {copySuccess}
