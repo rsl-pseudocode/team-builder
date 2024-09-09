@@ -280,7 +280,7 @@ function UnitsBuilder() {
                       {units.map((unit, index) => (
                         <Grid item xs={12} key={index}>
                           <Box mt={1}>
-                            <Typography variant="h6">Unit {index + 1}</Typography>
+                            <Typography variant="h6" sx={{textDecoration: 'underline'}}>Unit {index + 1}</Typography>
                             <List>
                               {unit.map((member, idx) => (
                                 <ListItem key={idx}>{member}</ListItem>
