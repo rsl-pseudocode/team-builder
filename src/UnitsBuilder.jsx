@@ -77,57 +77,57 @@ const colors = [
 ];
 
 const animals = [
-    "Lions",
-    "Tigers",
-    "Elephants",
-    "Giraffes",
-    "Zebras",
-    "Pandas",
-    "Kangaroos",
-    "Koalas",
-    "Penguins",
-    "Dolphins",
-    "Sharks",
-    "Whales",
-    "Eagles",
-    "Falcons",
-    "Wolves",
-    "Bears",
-    "Leopards",
-    "Cheetahs",
-    "Rhinoceroses",
-    "Hippopotamuses",
-    "Crocodiles",
-    "Alligators",
-    "Ostriches",
-    "Camels",
-    "Gorillas",
-    "Chimpanzees",
-    "Orangutans",
-    "Rabbits",
-    "Foxes",
-    "Deers",
-    "Owls",
-    "Peacocks",
-    "Horses",
-    "Dogs",
-    "Cats",
-    "Mice",
-    "Squirrels",
-    "Hamsters",
-    "Frogs",
-    "Turtles",
-    "Snakes",
-    "Parrots",
-    "Flamingos",
-    "Otters",
-    "Seals",
-    "Polar Bears",
-    "Mooses",
-    "Bisons",
-    "Buffalos",
-    "Raccoons",
-    "Hedgehogs",
+  "Lions",
+  "Tigers",
+  "Elephants",
+  "Giraffes",
+  "Zebras",
+  "Pandas",
+  "Kangaroos",
+  "Koalas",
+  "Penguins",
+  "Dolphins",
+  "Sharks",
+  "Whales",
+  "Eagles",
+  "Falcons",
+  "Wolves",
+  "Bears",
+  "Leopards",
+  "Cheetahs",
+  "Rhinoceroses",
+  "Hippopotamuses",
+  "Crocodiles",
+  "Alligators",
+  "Ostriches",
+  "Camels",
+  "Gorillas",
+  "Chimpanzees",
+  "Orangutans",
+  "Rabbits",
+  "Foxes",
+  "Deers",
+  "Owls",
+  "Peacocks",
+  "Horses",
+  "Dogs",
+  "Cats",
+  "Mice",
+  "Squirrels",
+  "Hamsters",
+  "Frogs",
+  "Turtles",
+  "Snakes",
+  "Parrots",
+  "Flamingos",
+  "Otters",
+  "Seals",
+  "Polar Bears",
+  "Mooses",
+  "Bisons",
+  "Buffalos",
+  "Raccoons",
+  "Hedgehogs",
 ];
 
 function UnitsBuilder() {
@@ -184,7 +184,13 @@ function UnitsBuilder() {
     setShareUrl("");
   };
 
-  const handleAddName = () => {
+  const onEnterPress = (e) => {
+    if (e.key === "Enter") {
+      handleAddName();
+    }
+  };
+
+  const handleAddName = (e) => {
     reset();
     if (name.trim() !== "" && !names.includes(name.trim())) {
       setNames([...names, name.trim()]);
@@ -256,7 +262,9 @@ function UnitsBuilder() {
       .sort(() => Math.random() - 0.5)
       .slice(0, numberOfUnits);
 
-    const combinedTeamNames = shuffledColors.map((color, index) => `${color} ${shuffledAnimals[index]}`);
+    const combinedTeamNames = shuffledColors.map(
+      (color, index) => `${color} ${shuffledAnimals[index]}`
+    );
 
     setShuffledTeamNames(combinedTeamNames);
     setUnits(unitsArray);
@@ -342,6 +350,9 @@ function UnitsBuilder() {
                   variant="outlined"
                   fullWidth
                   inputRef={nameTextFieldRef}
+                  onKeyUp={(e) => {
+                    onEnterPress(e);
+                  }}
                 />
               </Grid>
               <Grid item sm={5} container justifyContent="center">
