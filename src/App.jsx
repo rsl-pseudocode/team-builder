@@ -13,15 +13,14 @@ function useQuery() {
   }
 
 function App() {
-    const [toggleDarkMode, setToggleDarkTheme] = useState(true);    
+    const [isDarkMode, setIsDarkMode] = useState(true);    
     const [isResultView, setIsResultView] = useState(false);
 
     const darkTheme = createTheme({
         palette: {
-            mode: toggleDarkMode ? 'dark' : 'light',
+            mode: isDarkMode ? 'dark' : 'light',
         },
     });
-
 
     const query = useQuery();
 
@@ -36,7 +35,7 @@ function App() {
         <ThemeProvider theme={darkTheme}>
             <CssBaseline/>
             <div style={{position: 'absolute', top: 0, right: 0}}>
-                <DarkModeSwitch setDarkThemeClicked={setToggleDarkTheme}/>
+                <DarkModeSwitch setDarkThemeClicked={setIsDarkMode}/>
             </div>
             <Grid
                 container
