@@ -7,6 +7,7 @@ import DarkModeSwitch from "./components/DarkModeSwitch.jsx";
 import DonateButton from "./components/DonateButton.jsx";
 import {useState, useEffect} from "react";
 import { useLocation } from 'react-router-dom';
+import { TITLE } from './constants';
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -48,7 +49,7 @@ function App() {
             >
                 <Grid item>
                     <Typography variant="h2" gutterBottom>
-                        Random units
+                        {TITLE}
                     </Typography>
                     {!isResultView && <Typography>Add your friends names and randomize teams/units</Typography>}                    
                 </Grid>
