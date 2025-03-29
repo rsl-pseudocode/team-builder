@@ -48,7 +48,7 @@ function App() {
             >
                 <Grid item>
                     <Typography variant="h2" gutterBottom>
-                        Random units
+                        Hello world
                     </Typography>
                     {!isResultView && <Typography>Add your friends names and randomize teams/units</Typography>}                    
                 </Grid>
